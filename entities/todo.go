@@ -54,6 +54,14 @@ func (t Todo) DueDate() time.Time {
 	return t.dueDate
 }
 
+// SetDueDate sets dueDate.
+// `error` is returned if the input was invalid.
+// but, no invalid case in current version .
+func (t *Todo) SetDueDate(dueDate time.Time) error {
+	t.dueDate = dueDate
+	return nil
+}
+
 // IsFinished returns isFinished
 func (t Todo) IsFinished() bool {
 	return t.isFinished

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -74,6 +75,31 @@ func TestSetDescription(t *testing.T) {
 		if test.wantErr != "" {
 			if err.Error() != test.wantErr {
 				t.Errorf(`%v - SetDescription(%v) got: %v, want: %v`, name, test.input, err.Error(), test.wantErr)
+			}
+		}
+	}
+}
+
+func TestSetDueDate(t *testing.T) {
+	tests := map[string]struct {
+		dueDate time.Time
+	}{
+		"valid dueDate": {
+			dueDate: time.Now().UTC(),
+		},
+	}
+
+	for name, test := range tests {
+		desc := "make todo app."
+		todo, err := NewTodo(desc)
+		if err != nil {
+			t.Errorf(`%v - SetDueDate(%v) was failed in initial Todo generation. init_desc: %v`, name, test.dueDate, desc)
+		}
+
+		err = todo.SetDueDate(test.dueDate)
+		if err == nil {
+			if todo.DueDate() != test.dueDate {
+				t.Errorf(`%v - SetDueDate(%v) got: %v, want: %[2]v`, name, test.dueDate, todo.DueDate())
 			}
 		}
 	}
