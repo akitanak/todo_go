@@ -59,13 +59,10 @@ func TestSetDescription(t *testing.T) {
 	}
 
 	for name, test := range tests {
-		initDesc := "build todo app."
-		todo, err := NewTodo(initDesc)
-		if err != nil {
-			t.Errorf(`%v - SetDescription(%v) was failed in initial Todo generation. init_desc: %v`, name, test.input, initDesc)
-		}
+		desc := "build todo app."
+		todo := createInitialTodo(t, name, desc)
 
-		err = todo.SetDescription(test.input)
+		err := todo.SetDescription(test.input)
 		if test.want != "" {
 			if todo.Description() != test.want {
 				t.Errorf(`%v - SetDescription(%v) got: %v, want: %v`, name, test.input, todo.Description(), test.want)
@@ -91,18 +88,28 @@ func TestSetDueDate(t *testing.T) {
 
 	for name, test := range tests {
 		desc := "make todo app."
-		todo, err := NewTodo(desc)
-		if err != nil {
-			t.Errorf(`%v - SetDueDate(%v) was failed in initial Todo generation. init_desc: %v`, name, test.dueDate, desc)
-		}
+		todo := createInitialTodo(t, name, desc)
 
-		err = todo.SetDueDate(test.dueDate)
+		err := todo.SetDueDate(test.dueDate)
 		if err == nil {
 			if todo.DueDate() != test.dueDate {
 				t.Errorf(`%v - SetDueDate(%v) got: %v, want: %[2]v`, name, test.dueDate, todo.DueDate())
 			}
 		}
 	}
+}
+
+func TestFinish(t *testing.T) {
+	name := "finish Todo"
+	desc := "make todo app."
+	todo := createInitialTodo(t, name, desc)
+
+	todo.Finish()
+
+	if !todo.IsFinished() {
+		t.Errorf(`%v - Finish() failed. got: %v, want: %v`, name, true, todo.IsFinished())
+	}
+
 }
 
 func assertTodo(t *testing.T, name string, input string, got, want Todo) {
@@ -118,4 +125,12 @@ func assertTodo(t *testing.T, name string, input string, got, want Todo) {
 	if got.IsFinished() != false {
 		t.Errorf(`%v - NewTodo(%v).IsFinished() got: \"%v\", want: \"%v\"`, name, input, got.IsFinished(), false)
 	}
+}
+
+func createInitialTodo(t *testing.T, name string, description string) *Todo {
+	todo, err := NewTodo(description)
+	if err != nil {
+		t.Errorf(`%v - failed in initial Todo creation. description: %v`, name, description)
+	}
+	return todo
 }

@@ -66,3 +66,7 @@ func (t *Todo) SetDueDate(dueDate time.Time) error {
 func (t Todo) IsFinished() bool {
 	return t.isFinished
 }
+
+func (t *Todo) Finish() {
+	t.isFinished = true
+}
