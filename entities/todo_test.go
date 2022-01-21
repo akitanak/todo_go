@@ -15,7 +15,7 @@ func TestNewTodo(t *testing.T) {
 	}{
 		"create new Todo.": {
 			input:   "build todo app with golang.",
-			want:    &Todo{Description: "build todo app with golang."},
+			want:    &Todo{description: "build todo app with golang."},
 			wantErr: nil,
 		},
 		"too long description": {
@@ -40,15 +40,15 @@ func TestNewTodo(t *testing.T) {
 
 func assertTodo(t *testing.T, name string, input string, got, want Todo) {
 	var zeroUuid uuid.UUID
-	if got.Id == zeroUuid {
-		t.Errorf(`%v - NewTodo(%v).Id got: \"%v\", want: \"%v\"`, name, input, got.Id, "non zero UUID")
+	if got.Id() == zeroUuid {
+		t.Errorf(`%v - NewTodo(%v).Id() got: \"%v\", want: \"%v\"`, name, input, got.Id(), "non zero UUID")
 	}
 
-	if got.Description != want.Description {
-		t.Errorf(`%v - NewTodo(%v).Description got: \"%v\", want: \"%v\"`, name, input, got.Description, want.Description)
+	if got.Description() != want.Description() {
+		t.Errorf(`%v - NewTodo(%v).Description() got: \"%v\", want: \"%v\"`, name, input, got.Description(), want.Description())
 	}
 
-	if got.IsFinished != false {
-		t.Errorf(`%v - NewTodo(%v).IsFinished got: \"%v\", want: \"%v\"`, name, input, got.IsFinished, false)
+	if got.IsFinished() != false {
+		t.Errorf(`%v - NewTodo(%v).IsFinished() got: \"%v\", want: \"%v\"`, name, input, got.IsFinished(), false)
 	}
 }

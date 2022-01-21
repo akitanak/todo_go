@@ -6,23 +6,45 @@ import (
 	"github.com/google/uuid"
 )
 
+// Todo Entity
 type Todo struct {
-	Id          uuid.UUID
-	Description string
-	DueDate     time.Time
-	IsFinished  bool
+	id          uuid.UUID
+	description string
+	dueDate     time.Time
+	isFinished  bool
 }
 
+// Create new Todo. It assigns id with random UUID.
 func NewTodo(description string) (*Todo, error) {
 	if err := ValidateDescription(description); err != nil {
 		return nil, err
 	}
 
 	todo := Todo{
-		Id:          uuid.New(),
-		Description: description,
-		IsFinished:  false,
+		id:          uuid.New(),
+		description: description,
+		isFinished:  false,
 	}
 
 	return &todo, nil
+}
+
+// Id returns id.
+func (t Todo) Id() uuid.UUID {
+	return t.id
+}
+
+// Description returns description.
+func (t Todo) Description() string {
+	return t.description
+}
+
+// DueDate returns dueDate.
+func (t Todo) DueDate() time.Time {
+	return t.dueDate
+}
+
+// IsFinished returns isFinished
+func (t Todo) IsFinished() bool {
+	return t.isFinished
 }
