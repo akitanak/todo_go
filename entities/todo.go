@@ -41,7 +41,7 @@ func (t Todo) Description() string {
 
 // SetDescription updates description.
 // `error` is returned if the input was invalid.
-func (t *Todo) SetDescrption(description string) error {
+func (t *Todo) SetDescription(description string) error {
 	if err := ValidateDescription(description); err != nil {
 		return err
 	}
