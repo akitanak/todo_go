@@ -39,6 +39,16 @@ func (t Todo) Description() string {
 	return t.description
 }
 
+// SetDescription updates description.
+// `error` is returned if the input was invalid.
+func (t *Todo) SetDescrption(description string) error {
+	if err := ValidateDescription(description); err != nil {
+		return err
+	}
+	t.description = description
+	return nil
+}
+
 // DueDate returns dueDate.
 func (t Todo) DueDate() time.Time {
 	return t.dueDate
