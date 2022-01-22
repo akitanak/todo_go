@@ -67,6 +67,7 @@ func (t Todo) IsFinished() bool {
 	return t.isFinished
 }
 
+// Finish change isFinish's value true
 func (t *Todo) Finish() {
 	t.isFinished = true
 }
