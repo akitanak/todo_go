@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -61,4 +62,11 @@ func (t Todo) IsFinished() bool {
 // Finish change isFinish's value true
 func (t *Todo) Finish() {
 	t.isFinished = true
+}
+
+func (t Todo) String() string {
+	dueDateLayout := "2006-01-02"
+	return fmt.Sprintf(
+		"Todo{description: %v, dueDate: %v, isFinished: %v}",
+		t.Description(), t.DueDate().Format(dueDateLayout), t.IsFinished())
 }
