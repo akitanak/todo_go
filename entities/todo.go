@@ -2,13 +2,10 @@ package entities
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 // Todo Entity
 type Todo struct {
-	id          uuid.UUID
 	description string
 	dueDate     time.Time
 	isFinished  bool
@@ -21,17 +18,11 @@ func NewTodo(description string) (*Todo, error) {
 	}
 
 	todo := Todo{
-		id:          uuid.New(),
 		description: description,
 		isFinished:  false,
 	}
 
 	return &todo, nil
-}
-
-// Id returns id.
-func (t Todo) Id() uuid.UUID {
-	return t.id
 }
 
 // Description returns description.

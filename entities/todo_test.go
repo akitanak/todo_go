@@ -5,8 +5,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 func TestNewTodo(t *testing.T) {
@@ -113,10 +111,6 @@ func TestFinish(t *testing.T) {
 }
 
 func assertTodo(t *testing.T, name string, input string, got, want Todo) {
-	var zeroUuid uuid.UUID
-	if got.Id() == zeroUuid {
-		t.Errorf(`%v - NewTodo(%v).Id() got: \"%v\", want: \"%v\"`, name, input, got.Id(), "non zero UUID")
-	}
 
 	if got.Description() != want.Description() {
 		t.Errorf(`%v - NewTodo(%v).Description() got: \"%v\", want: \"%v\"`, name, input, got.Description(), want.Description())

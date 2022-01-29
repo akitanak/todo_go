@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/akitanak/todo_go/entities"
-	"github.com/google/uuid"
 )
 
 type CreateTodoOptions struct {
@@ -13,7 +12,6 @@ type CreateTodoOptions struct {
 }
 
 type CreateTodoResponse struct {
-	Id          uuid.UUID
 	Description string
 	DueDate     time.Time
 	IsFinished  bool
@@ -32,7 +30,6 @@ func CreateTodo(description string, options *CreateTodoOptions) (*CreateTodoResp
 	}
 
 	return &CreateTodoResponse{
-		Id:          todo.Id(),
 		Description: todo.Description(),
 		DueDate:     todo.DueDate(),
 		IsFinished:  todo.IsFinished(),
