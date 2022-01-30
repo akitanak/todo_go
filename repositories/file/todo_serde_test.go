@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -13,7 +14,7 @@ func TestSerialize(t *testing.T) {
 		want     string
 	}{
 		"standard case": {
-			original: *createTodo(t, "build a todo app.", emptyTime, false),
+			original: *createTodo(t, "build a todo app.", zeroValueTime, false),
 			want:     "- [ ] build a todo app.",
 		},
 		"with DueDate": {
@@ -38,43 +39,60 @@ func TestSerialize(t *testing.T) {
 func TestDeserialize(t *testing.T) {
 	tests := map[string]struct {
 		original string
-		want     entities.Todo
+		want     *entities.Todo
 		wantErr  string
 	}{
 		"standard case": {
 			original: "- [ ] build a todo app.",
-			want:     *createTodo(t, "build a todo app.", emptyTime, false),
+			want:     createTodo(t, "build a todo app.", zeroValueTime, false),
 			wantErr:  "",
 		},
 		"with DueDate": {
 			original: "- [ ] build a todo app.\t2022-02-01",
-			want:     *createTodo(t, "build a todo app.", time.Date(2022, time.February, 1, 0, 0, 0, 0, time.UTC), false),
+			want:     createTodo(t, "build a todo app.", time.Date(2022, time.February, 1, 0, 0, 0, 0, time.UTC), false),
 			wantErr:  "",
 		},
 		"finished Todo": {
 			original: "- [x] build a todo app.\t2022-02-01",
-			want:     *createTodo(t, "build a todo app.", time.Date(2022, time.February, 1, 0, 0, 0, 0, time.UTC), true),
+			want:     createTodo(t, "build a todo app.", time.Date(2022, time.February, 1, 0, 0, 0, 0, time.UTC), true),
 			wantErr:  "",
+		},
+		"not checklist formatted": {
+			original: "- build a todo app.\t2022-02-01",
+			want:     nil,
+			wantErr:  "invalid format. row must be task list styled.",
+		},
+		"invalid description is stored": {
+			original: "- [ ] " + strings.Repeat("a", 65),
+			want:     nil,
+			wantErr:  "failed to deserialize Todo.",
+		},
+		"invalid format DueDate": {
+			original: "- [ ] build a todo app.\t2022/02/01",
+			want:     nil,
+			wantErr:  "failed to deserialize Todo.",
 		},
 	}
 
 	for name, test := range tests {
 		deserialized, err := deserialize(test.original)
 
-		if *deserialized != test.want {
-			t.Errorf("%v - got: %v, want: %v", name, *deserialized, test.want)
+		if test.want != nil {
+			if *deserialized != *test.want {
+				t.Errorf("%v - got: %v, want: %v", name, *deserialized, test.want)
+			}
 		}
 
 		if test.wantErr != "" {
 			err := err.Error()
-			if err != test.wantErr {
+			if !strings.HasPrefix(err, test.wantErr) {
 				t.Errorf("%v - got: %v, want: %v", name, err, test.wantErr)
 			}
 		}
 	}
 }
 
-var emptyTime time.Time
+var zeroValueTime time.Time
 
 func createTodo(t *testing.T, description string, dueDate time.Time, isFinished bool) *entities.Todo {
 	todo, err := entities.NewTodo(description)
