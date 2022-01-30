@@ -11,7 +11,7 @@ func TestInitTodoRepository(t *testing.T) {
 		wantPath string
 		wantErr  string
 	}{
-		"normal case": {
+		"initial execution case": {
 			path:     "../../testdata/repositories/file/todo.md",
 			wantPath: "/testdata/repositories/file/todo.md",
 			wantErr:  "",

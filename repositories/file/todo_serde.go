@@ -74,7 +74,7 @@ func isFinished(row string) bool {
 }
 
 func extractDescription(row string) string {
-	return row[6:len(row)]
+	return row[6:]
 }
 
 var dueDateLayout = "2006-01-02"
