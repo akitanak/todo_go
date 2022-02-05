@@ -21,6 +21,26 @@ func TestValidateDescription(t *testing.T) {
 			input: "12345678901234567890123456789012345678901234567890123456789012345",
 			want:  "description is too long. max: 64, actual: 65",
 		},
+		"contains tab": {
+			input: "abc\tdef",
+			want:  "description contains some prohibit charactor(tab, new line, carriage return, vertical tab, form feed)",
+		},
+		"contains new line": {
+			input: "abc\ndef",
+			want:  "description contains some prohibit charactor(tab, new line, carriage return, vertical tab, form feed)",
+		},
+		"contains carriage return": {
+			input: "abc\rdef",
+			want:  "description contains some prohibit charactor(tab, new line, carriage return, vertical tab, form feed)",
+		},
+		"contains vertical tab": {
+			input: "abc\vdef",
+			want:  "description contains some prohibit charactor(tab, new line, carriage return, vertical tab, form feed)",
+		},
+		"contains form feed": {
+			input: "abc\fdef",
+			want:  "description contains some prohibit charactor(tab, new line, carriage return, vertical tab, form feed)",
+		},
 	}
 
 	for name, test := range tests {
