@@ -40,3 +40,7 @@ func InitTodoRepository(path string) (*TodoRepository, error) {
 
 	return &TodoRepository{file: file, todoList: todoList}, nil
 }
+
+func (repo *TodoRepository) Add(todo entities.Todo) {
+	repo.todoList = append(repo.todoList, todo)
+}
