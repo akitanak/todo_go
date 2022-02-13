@@ -106,3 +106,58 @@ func TestAdd(t *testing.T) {
 		}
 	}
 }
+
+func TestList(t *testing.T) {
+	type want struct {
+		listSize int
+		todos    []*entities.Todo
+	}
+
+	tests := map[string]struct {
+		path            string
+		excludeFinished bool
+		want            want
+	}{
+		"three todos": {
+			path:            "../../testdata/repositories/file/standard_todo_file.md",
+			excludeFinished: false,
+			want: want{
+				listSize: 3,
+				todos: []*entities.Todo{
+					createTodo(t, "make a todo app.", zeroValueTime, false),
+					createTodo(t, "pay car pool fee.", time.Date(2022, time.Month(1), 30, 0, 0, 0, 0, time.UTC), true),
+					createTodo(t, "send books.", time.Date(2022, time.Month(2), 1, 0, 0, 0, 0, time.UTC), false),
+				},
+			},
+		},
+		"exclude finished": {
+			path:            "../../testdata/repositories/file/standard_todo_file.md",
+			excludeFinished: true,
+			want: want{
+				listSize: 2,
+				todos: []*entities.Todo{
+					createTodo(t, "make a todo app.", zeroValueTime, false),
+					createTodo(t, "send books.", time.Date(2022, time.Month(2), 1, 0, 0, 0, 0, time.UTC), false),
+				},
+			},
+		},
+	}
+
+	for name, test := range tests {
+		repo, err := InitTodoRepository(test.path)
+		if err != nil {
+			t.Errorf("%v - initialize TodoRepository was failed", name)
+		}
+
+		todos := repo.List(test.excludeFinished)
+
+		if len(todos) != test.want.listSize {
+			t.Errorf("%v - todoList size was unmatched. got: %v, want: %v", name, len(repo.todoList), test.want.listSize)
+		}
+		for i, todo := range todos {
+			if todo != *test.want.todos[i] {
+				t.Errorf("%v - Todo was not matched. got: %v, want: %v", name, todo, *test.want.todos[i])
+			}
+		}
+	}
+}

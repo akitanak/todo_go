@@ -44,3 +44,14 @@ func InitTodoRepository(path string) (*TodoRepository, error) {
 func (repo *TodoRepository) Add(todo entities.Todo) {
 	repo.todoList = append(repo.todoList, todo)
 }
+
+func (repo *TodoRepository) List(excludeFinished bool) []entities.Todo {
+	list := make([]entities.Todo, 0)
+	for _, todo := range repo.todoList {
+		if !excludeFinished || !todo.IsFinished() {
+			list = append(list, todo)
+		}
+	}
+
+	return list
+}
