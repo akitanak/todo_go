@@ -35,7 +35,7 @@ func TestInitTodoRepository(t *testing.T) {
 
 		if test.wantPath != "" {
 			if err != nil {
-				t.Errorf("%v - InitTodoRepository was failed unexpectedly. %w", name, err)
+				t.Errorf("%v - InitTodoRepository was failed unexpectedly. %v", name, err)
 			}
 			if !strings.HasSuffix(repo.file.Name(), test.wantPath) {
 				t.Errorf("%v - file path was unmatched. got: %v, want: %v", name, repo.file.Name(), test.wantPath)
